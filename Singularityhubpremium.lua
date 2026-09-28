@@ -1,4 +1,23 @@
 -- ============================================================
+-- Delta Compatibility Fix
+-- ============================================================
+if not gethui then
+    function gethui()
+        return game:GetService("CoreGui")
+    end
+end
+if not syn then syn = {} end
+if not syn.protect_gui then
+    function syn.protect_gui(gui)
+        gui.Parent = gethui()
+    end
+end
+if not protect_gui then
+    function protect_gui(gui)
+        gui.Parent = gethui()
+    end
+end
+-- ============================================================-- ============================================================
 -- Singularity hub premium - FULL FIXED VERSION
 -- Part 1 / 8 : Initialization & Utilities
 -- ============================================================
