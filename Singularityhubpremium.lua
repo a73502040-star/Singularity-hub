@@ -4553,4 +4553,21 @@ print("[Singularity hub premium] Part 8-B loaded - ALL COMPLETE!")
     Footer = "v1.0",
     Icon = 1234567890,
     NotifySide = "Right"
+})-- ============================================================
+-- UI Creation (追加)
+-- ============================================================
+local Window = Library:CreateWindow({
+    Title = "Singularity Hub Premium",
+    Footer = "1-8 Complete Version",
+    Icon = 1234567890,
+    NotifySide = "Right"
 })
+
+local MainTab = Window:CreateTab("Main", "home")
+MainTab:CreateButton({
+    Name = "テストボタン",
+    Callback = function()
+        Library:Notify({Title = "起動成功", Description = "UIが正常に動作しています！", Time = 3})
+    end
+})
+-- ============================================================
