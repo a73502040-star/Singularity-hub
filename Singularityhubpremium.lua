@@ -4548,4 +4548,9 @@ end)
 
 print("[Singularity hub premium] Part 8-B loaded - ALL COMPLETE!")
 -- [Part 8-B END] --
--- [ALL BLOCKS COMPLETE] --
+-- [ALL BLOCKS COMPLETE] --local Window = Library:CreateWindow({
+    Title = "Singularity Hub Premium",
+    Footer = "v1.0",
+    Icon = 1234567890,
+    NotifySide = "Right"
+})
