@@ -4,23 +4,21 @@ local P,W,RS,R=game:GetService("Players"),game:GetService("Workspace"),game:GetS
 local LP,Cam=P.LocalPlayer,W.CurrentCamera
 local GE,MT,CE=RS:FindFirstChild("GrabEvents"),RS:FindFirstChild("MenuToys"),RS:FindFirstChild("CharacterEvents")
 local SN,ST,DT,RG,SG=GE and GE:FindFirstChild("SetNetworkOwner"),MT and MT:FindFirstChild("SpawnToyRemoteFunction"),MT and MT:FindFirstChild("DestroyToy"),CE and CE:FindFirstChild("RagdollRemote"),CE and CE:FindFirstChild("Struggle")
-local CG=GE and GE:FindFirstChild("CreateGrabLine")
-local DG=GE and GE:FindFirstChild("DestroyGrabLine")
-local EG=GE and GE:FindFirstChild("ExtendGrabLine")
+local CG,DG,EG=GE and GE:FindFirstChild("CreateGrabLine"),GE and GE:FindFirstChild("DestroyGrabLine"),GE and GE:FindFirstChild("ExtendGrabLine")
 local STN,TOYV,TLO,TLT=nil,3,false,nil
 local function N(t,d,tm)L:Notify({Title=t,Description=d,Time=tm or 3})end
-local function PLS()local t={}for _,p in ipairs(P:GetPlayers())do if p~=LP then table.insert(t,p.DisplayName.." (@"..p.Name..")")end end table.sort(t,function(a,b)return a:lower()<b:lower()end)return t end
+local function PLS()local t={}for _,p in ipairs(P:GetPlayers())do if p~=LP then t[#t+1]=p.DisplayName.." (@"..p.Name..")"end end table.sort(t,function(a,b)return a:lower()<b:lower()end)return t end
 local function US(s)return s and s:match("%(@(.+)%)$")end
 local function MH()local c=LP.Character return c and c:FindFirstChild("HumanoidRootPart")end
 local function MU()local c=LP.Character return c and c:FindFirstChildOfClass("Humanoid")end
-local function PH(p)if not p then return nil end local c=p.Character if c and c.Parent==W then local h=c:FindFirstChild("HumanoidRootPart")if h then return h end end end
+local function PH(p)if not p then return end local c=p.Character if c and c.Parent==W then return c:FindFirstChild("HumanoidRootPart")end end
 local function TP(n,oy)if not n then return end local t=P:FindFirstChild(n)if not t then return end local th=PH(t)if not th then return end local mh=MH()if not mh then return end mh.CFrame=th.CFrame+Vector3.new(0,oy or 3,0)mh.AssemblyLinearVelocity=Vector3.zero mh.AssemblyAngularVelocity=Vector3.zero end
 local function STP()if TLT then pcall(task.cancel,TLT)TLT=nil end end
 local function STPR()STP()if not STN then return end TLT=task.spawn(function()while TLO do TP(STN,TOYV)R.Heartbeat:Wait()end TLT=nil end)end
 local _tk={}
-local function reg(t)if t then table.insert(_tk,t)return t end end
+local function reg(t)if t then _tk[#_tk+1]=t return t end end
 local function cancelAll()for _,t in ipairs(_tk)do pcall(task.cancel,t)end _tk={}end
-local function mkLag(rate)return function()local c,f=nil,0 local b=math.floor(rate/60)local r2=rate-b*60 local function st()if c then c:Disconnect()end c=R.Heartbeat:Connect(function()f=f+1 local sc=b+(f<=r2 and 1 or 0)local sp=W:FindFirstChild("SpawnLocation")or W:FindFirstChild("Spawn")or MH()if sp then for _=1,sc do pcall(function()if CG then CG:FireServer(sp,CFrame.new(math.random(-2e9,2e9),0,math.random(-2e9,2e9)))end end)end end)end local function sp()if c then c:Disconnect()c=nil end end return st,sp end end
+local function mkLag(rate)return function()local c,f=nil,0 local b=math.floor(rate/60)local r2=rate-b*60 local function st()if c then c:Disconnect()end c=R.Heartbeat:Connect(function()f=f+1 local sc=b+(f<=r2 and 1 or 0)local sp=W:FindFirstChild("SpawnLocation")or W:FindFirstChild("Spawn")or MH()if sp then for _=1,sc do pcall(function()if CG then CG:FireServer(sp,CFrame.new(math.random(-1e9,1e9),0,math.random(-1e9,1e9)))end end)end end)end local function sp()if c then c:Disconnect()c=nil end end return st,sp end end
 local function mkKick(rate)
 local stL,spL=mkLag(rate)()
 local run,tk=false,nil
@@ -31,17 +29,17 @@ tk=reg(task.spawn(function()
 stL()local H=35 task.wait(single and 1 or .5)
 local my=MH()if not my then stop()return end
 local list={}
-if single then if not STN then stop()return end local tp=P:FindFirstChild(STN)local h=tp and PH(tp)if h then table.insert(list,h)end
-else for _,p in ipairs(P:GetPlayers())do if p~=LP then local h=PH(p)if h then table.insert(list,h)end end end end
+if single then if not STN then stop()return end local tp=P:FindFirstChild(STN)local h=tp and PH(tp)if h then list[1]=h end
+else for _,p in ipairs(P:GetPlayers())do if p~=LP then local h=PH(p)if h then list[#list+1]=h end end end end
 if #list==0 then task.wait(5)stop()return end
-N("Kick",(single and "Target"or("All ("..#list..")")).." kicked",3)
+N("Kick",(single and"Target"or("All ("..#list..")")).." kicked",3)
 local sp=W:FindFirstChild("SpawnLocation")or W:FindFirstChild("Spawn")
 local cx=sp and sp.Position.X or 0 local cz=sp and sp.Position.Z or 0
 pcall(function()my.CFrame=CFrame.new(cx,H,cz)my.AssemblyLinearVelocity=Vector3.zero end)
 for _,h in ipairs(list)do pcall(function()my.CFrame=h.CFrame*CFrame.new(0,5,5)my.AssemblyLinearVelocity=Vector3.zero end)task.wait(.2)if SN then pcall(function()SN:FireServer(h,h.CFrame)end)end end
 local Rr=single and 10 or 80
 local step=(math.pi*2)/math.max(#list,1)
-for i,h in ipairs(list)do local a=(i-1)*step local x,z=math.cos(a)*Rr,math.sin(a)*Rr if single and not(i==1)then break end pcall(function()h.CFrame=CFrame.new(cx+x,H,cz+z)h.AssemblyLinearVelocity=Vector3.zero end)local bp=Instance.new("BodyPosition")bp.MaxForce=Vector3.new(9e9,9e9,9e9)bp.P=5e11 bp.Position=Vector3.new(cx+x,H,cz+z)bp.Parent=h task.delay(2,function()pcall(function()bp:Destroy()end)end)task.wait()end
+for i,h in ipairs(list)do local a=(i-1)*step local x,z=math.cos(a)*Rr,math.sin(a)*Rr if single and i>1 then break end pcall(function()h.CFrame=CFrame.new(cx+x,H,cz+z)h.AssemblyLinearVelocity=Vector3.zero end)local bp=Instance.new("BodyPosition")bp.MaxForce=Vector3.new(9e9,9e9,9e9)bp.P=5e11 bp.Position=Vector3.new(cx+x,H,cz+z)bp.Parent=h task.delay(2,function()pcall(function()bp:Destroy()end)end)task.wait()end
 pcall(function()my.CFrame=CFrame.new(cx,H,cz)my.AssemblyLinearVelocity=Vector3.zero end)
 for _=1,80 do for _,h in ipairs(list)do task.spawn(function()if CG and DG then pcall(function()CG:FireServer(h,CFrame.new(0,1e9,0))DG:FireServer(h)end)end end)end task.wait(.03)end
 task.wait(6)stop()end))
@@ -57,7 +55,7 @@ if run then return end run=true
 tk=reg(task.spawn(function()
 stL()local H=35 task.wait(.5)
 local my=MH()if not my then stop()return end
-local list={}for _,p in ipairs(P:GetPlayers())do if p~=LP then local h=PH(p)if h then table.insert(list,h)end end end
+local list={}for _,p in ipairs(P:GetPlayers())do if p~=LP then local h=PH(p)if h then list[#list+1]=h end end end
 if #list==0 then task.wait(5)stop()return end
 N("Kick","All ("..#list..") kicked",3)
 local sp=W:FindFirstChild("SpawnLocation")or W:FindFirstChild("Spawn")
@@ -112,7 +110,7 @@ local SKA,SKT,SKL,SKN=false,nil,false,nil
 local function SKStop()SKA=false if SKT then pcall(task.cancel,SKT)SKT=nil end SKL=false local t=SKN and P:FindFirstChild(SKN)if t and t.Character then local r=t.Character:FindFirstChild("HumanoidRootPart")if r and r:FindFirstChild("ControlBP")then r.ControlBP:Destroy()end end end
 local function SKStart(n)
 if SKA then return end SKN=n SKA=true SKL=true
-reg(task.spawn(function()while SKL do local sp=W:FindFirstChild("SpawnLocation")or W:FindFirstChild("Spawn")or MH()if sp and CG then CG:FireServer(sp,CFrame.new(math.random(-2e9,2e9),0,math.random(-2e9,2e9)))end task.wait()end end))
+reg(task.spawn(function()while SKL do local sp=W:FindFirstChild("SpawnLocation")or W:FindFirstChild("Spawn")or MH()if sp and CG then CG:FireServer(sp,CFrame.new(math.random(-1e9,1e9),0,math.random(-1e9,1e9)))end task.wait()end end))
 N("Kick",n.." kicked",3)
 SKT=reg(task.spawn(function()
 while SKA do
@@ -154,8 +152,8 @@ R.Heartbeat:Wait()end
 if br and sv then pcall(function()br.CFrame=sv br.AssemblyLinearVelocity=Vector3.zero end)end end))
 end
 local function SNOF(p,cf)if p and SN then pcall(function()SN:FireServer(p,cf or p.CFrame)end)end end
-local DS={height="Spawn",lineLag=false,thread=nil,radius=10}
-local function DSGetAll()local t={}for _,p in ipairs(P:GetPlayers())do if p~=LP then table.insert(t,p)end end return t end
+local DS={height="Spawn",lineLag=false,thread=nil,radius=20}
+local function DSGetAll()local t={}for _,p in ipairs(P:GetPlayers())do if p~=LP then t[#t+1]=p end end return t end
 local function DSTp(m,t)if not m or not t then return end pcall(function()m.CFrame=t.CFrame*CFrame.new(0,5,5)m.AssemblyLinearVelocity=Vector3.zero end)end
 local function DSDestroy(h)if not CG or not DG then return end pcall(function()CG:FireServer(h,CFrame.new(0,1e9,0))task.wait()DG:FireServer(h)end)end
 local function DSStartLag()
@@ -172,7 +170,7 @@ DSStartLag()task.wait(1)
 local players=DSGetAll()
 if #players==0 then DSStopLag()N("Destroy","No targets",3)DSRT=nil return end
 local mh=MH()if not mh then DSStopLag()DSRT=nil return end
-local data={}for _,p in ipairs(players)do local c=p.Character local h=c and c:FindFirstChild("HumanoidRootPart")if h then table.insert(data,{p=p,h=h})end end
+local data={}for _,p in ipairs(players)do local c=p.Character local h=c and c:FindFirstChild("HumanoidRootPart")if h then data[#data+1]={p=p,h=h}end end
 for _,d in ipairs(data)do DSTp(mh,d.h)task.wait(.2)if SN then pcall(function()SN:FireServer(d.h,d.h.CFrame)end)end task.wait()end
 local r=DS.radius local step=(math.pi*2)/#data
 for i,d in ipairs(data)do local a=(i-1)*step local x,z=math.cos(a)*r,math.sin(a)*r pcall(function()d.h.CFrame=CFrame.new(x,height,z)d.h.AssemblyLinearVelocity=Vector3.zero end)local bp=Instance.new("BodyPosition")bp.MaxForce=Vector3.new(1e9,1e9,1e9)bp.P=12e7 bp.Position=Vector3.new(x,height,z)bp.Parent=d.h task.delay(2,function()pcall(function()bp:Destroy()end)end)task.wait()end
@@ -313,7 +311,7 @@ local KAT=nil
 local function KAll()
 if KAT then return end
 KAT=reg(task.spawn(function()
-local list={}for _,p in ipairs(P:GetPlayers())do if p~=LP and not KA.wl[p.Name]and p.Character and p.Character:FindFirstChild("HumanoidRootPart")then table.insert(list,p)end end end
+local list={}for _,p in ipairs(P:GetPlayers())do if p~=LP and not KA.wl[p.Name]and p.Character and p.Character:FindFirstChild("HumanoidRootPart")then list[#list+1]=p end end end
 if #list==0 then N("KickAll","No targets",2)KAT=nil return end
 N("KickAll","Kicking "..#list.." players",2)
 local r=MH()if not r then KAT=nil return end
@@ -344,7 +342,7 @@ local NBT=nil
 local function NBRun()
 if NBT then return end
 NBT=reg(task.spawn(function()
-local list={}for _,p in ipairs(P:GetPlayers())do if p~=LP and p.Character and p.Character:FindFirstChild("HumanoidRootPart")then table.insert(list,p)end end end
+local list={}for _,p in ipairs(P:GetPlayers())do if p~=LP and p.Character and p.Character:FindFirstChild("HumanoidRootPart")then list[#list+1]=p end end end
 if #list==0 then N("NBlob","No targets",2)NBT=nil return end
 local r=MH()if not r then NBT=nil return end
 for _,p in ipairs(list)do local tr=p.Character and p.Character:FindFirstChild("HumanoidRootPart")if tr then r.CFrame=tr.CFrame*CFrame.new(0,5,5)task.wait(.2)if SN then for _=1,3 do pcall(function()SN:FireServer(tr,tr.CFrame)end)end end end end
@@ -507,12 +505,12 @@ local c=LP.Character local r=c and c:FindFirstChild("HumanoidRootPart")if not r 
 local org=r.Position+Vector3.new(0,500,0)
 TRT=reg(task.spawn(function()
 local pl=W:FindFirstChild("Plots")local tg={}
-if pl then for _,p in ipairs(pl:GetChildren())do if p:IsA("Model")and p.Name:match("^Plot%d+$")then local s=p:FindFirstChild("PlotSign")local ow=s and s:FindFirstChild("ThisPlotsOwners")local mine=false if ow then for _,o in ipairs(ow:GetChildren())do if o:IsA("ValueBase")and o.Value==LP.Name then mine=true break end end end if not mine then local b=p:FindFirstChild("Base")or p.PrimaryPart if b then table.insert(tg,b.Position)end end end end end
-if #tg==0 then table.insert(tg,org)end
-for i=1,60 do if not TSs.run then break end local t=tg[(i-1)%#tg+1]local sp=Vector3.new(t.X+math.random(-20,20),org.Y+math.random(0,200),t.Z+math.random(-20,20))local part=Instance.new("Part")part.Size=Vector3.new(math.random(20,40),math.random(50,100),math.random(20,40))part.Position=sp part.Anchored=false part.CanCollide=true part.Material=Enum.Material.Water part.Color=Color3.fromRGB(0,120,200)part.Transparency=.3 part.Parent=W table.insert(TSs.objs,part)if SN then pcall(function()SN:FireServer(part,part.CFrame)end)end if part.SetNetworkOwner then pcall(function()part:SetNetworkOwner(LP)end)end part.AssemblyLinearVelocity=Vector3.new(0,-200,0)task.delay(10,function()if part and part.Parent then part:Destroy()end end)task.wait(.05)end
+if pl then for _,p in ipairs(pl:GetChildren())do if p:IsA("Model")and p.Name:match("^Plot%d+$")then local s=p:FindFirstChild("PlotSign")local ow=s and s:FindFirstChild("ThisPlotsOwners")local mine=false if ow then for _,o in ipairs(ow:GetChildren())do if o:IsA("ValueBase")and o.Value==LP.Name then mine=true break end end end if not mine then local b=p:FindFirstChild("Base")or p.PrimaryPart if b then tg[#tg+1]=b.Position end end end end end
+if #tg==0 then tg[1]=org end
+for i=1,60 do if not TSs.run then break end local t=tg[(i-1)%#tg+1]local sp=Vector3.new(t.X+math.random(-20,20),org.Y+math.random(0,200),t.Z+math.random(-20,20))local part=Instance.new("Part")part.Size=Vector3.new(math.random(20,40),math.random(50,100),math.random(20,40))part.Position=sp part.Anchored=false part.CanCollide=true part.Material=Enum.Material.Water part.Color=Color3.fromRGB(0,120,200)part.Transparency=.3 part.Parent=W TSs.objs[#TSs.objs+1]=part if SN then pcall(function()SN:FireServer(part,part.CFrame)end)end if part.SetNetworkOwner then pcall(function()part:SetNetworkOwner(LP)end)end part.AssemblyLinearVelocity=Vector3.new(0,-200,0)task.delay(10,function()if part and part.Parent then part:Destroy()end end)task.wait(.05)end
 N("Tsunami","Wave deployed",3)TSs.run=false TRT=nil end))
 end
-local Wn=L:CreateWindow({Title="Singularity premium",Footer="All in One",Icon=95816097006868,NotifySide="Right",ShowCustomCursor=true})
+local Wn=L:CreateWindow({Title="Singularity premium",Footer="All in One",Icon="",NotifySide="Right",ShowCustomCursor=false})
 local TB={Main=Wn:AddTab("Main","user"),Kick=Wn:AddTab("Kick","swords"),Kill=Wn:AddTab("Kill","skull"),Defense=Wn:AddTab("Defense","shield"),Grab=Wn:AddTab("Grab","hand"),Dest=Wn:AddTab("Destroy","bomb"),Util=Wn:AddTab("Utility","wrench")}
 local TG=TB.Main:AddLeftGroupbox("Target","target")
 TG:AddDropdown("TargetDropdown",{Values=PLS(),Default="",Text="Select Target",Searchable=true,Callback=function(s)if s and s~=""then local u=US(s)if u then STN=u N("Target",u,2)end end end})
@@ -550,7 +548,7 @@ KLL:AddButton({Text="Void Loop Stop",Func=VLStop})
 KLL:AddSlider("VLInt",{Text="Void Interval",Default=1.5,Min=.1,Max=10,Rounding=1,Callback=function(v)VL.interval=v end})
 local DR=TB.Dest:AddLeftGroupbox("Destroy Server","bomb")
 DR:AddDropdown("DSHeight",{Text="Height",Values={"Spawn (Ground)","Heaven"},Default="Spawn (Ground)",Callback=function(v)DS.height=(v=="Heaven")and"Heaven"or"Spawn" end})
-DR:AddSlider("DSRadius",{Text="Radius",Default=10,Min=5,Max=100,Rounding=0,Callback=function(v)DS.radius=v end})
+DR:AddSlider("DSRadius",{Text="Radius",Default=20,Min=5,Max=100,Rounding=0,Callback=function(v)DS.radius=v end})
 DR:AddButton({Text="Destroy Server",Func=DSRun})
 DR:AddButton({Text="Stop Lag",Func=DSStopLag})
 local GL=TB.Grab:AddLeftGroupbox("Grab Effects","hand")
