@@ -537,8 +537,7 @@ if move.Magnitude>0 then move=move.Unit*FLY.speed end
 FLY.bv.Velocity=move
 FLY.bg.CFrame=Cam.CFrame
 end)
-N("Fly","On (WASD/Space/Ctrl)",3)end
-
+N("Fly","On",3)end
 local function tFly()
 FLY.active=false
 if FLY.conn then FLY.conn:Disconnect()FLY.conn=nil end
@@ -573,7 +572,7 @@ r.AssemblyLinearVelocity=Vector3.zero
 end
 end
 end)
-N("ClickTP","On (Click to TP)",3)end
+N("ClickTP","On",3)end
 local function tClickTP()CTP.active=false if CTP.conn then CTP.conn:Disconnect()CTP.conn=nil end N("ClickTP","Off",2)end
 
 local PBG={active=false,thread=nil}
@@ -596,7 +595,7 @@ end
 R.Heartbeat:Wait()
 end
 end))
-N("PacketBypass","On (Anti-Grab Bypass)",3)end
+N("PacketBypass","On",3)end
 local function tPacketBypass()PBG.active=false if PBG.thread then pcall(task.cancel,PBG.thread)PBG.thread=nil end N("PacketBypass","Off",2)end
 
 local SAG={active=false,thread=nil,radius=15}
@@ -621,7 +620,7 @@ end
 R.Heartbeat:Wait()
 end
 end))
-N("AutoGrab","On (Silent Aim Aura)",3)end
+N("AutoGrab","On",3)end
 local function tAutoGrab()SAG.active=false if SAG.thread then pcall(task.cancel,SAG.thread)SAG.thread=nil end N("AutoGrab","Off",2)end
 
 local TC={active=false,thread=nil,target=nil}
@@ -650,7 +649,7 @@ end
 R.Heartbeat:Wait()
 end
 end))
-N("Crasher","On (Target: "..TC.target..")",3)end
+N("Crasher","On",3)end
 local function tTargetCrasher()TC.active=false if TC.thread then pcall(task.cancel,TC.thread)TC.thread=nil end N("Crasher","Off",2)end
 
 local AL={active=false,thread=nil,lastCF=nil}
@@ -672,14 +671,14 @@ end
 R.Heartbeat:Wait()
 end
 end))
-N("AntiLagback","On (Desync Safety)",3)end
+N("AntiLagback","On",3)end
 local function tAntiLagback()AL.active=false if AL.thread then pcall(task.cancel,AL.thread)AL.thread=nil end AL.lastCF=nil N("AntiLagback","Off",2)end
 
 local Wn=L:CreateWindow({Title="Singularity premium",Footer="All in One",Icon="",NotifySide="Right",ShowCustomCursor=false})
 local TB={Main=Wn:AddTab("Main","user"),Kick=Wn:AddTab("Kick","swords"),Kill=Wn:AddTab("Kill","skull"),Defense=Wn:AddTab("Defense","shield"),Grab=Wn:AddTab("Grab","hand"),Dest=Wn:AddTab("Destroy","bomb"),Util=Wn:AddTab("Utility","wrench")}
 local TG=TB.Main:AddLeftGroupbox("Target","target")
 TG:AddDropdown("TargetDropdown",{Values=PLS(),Default="",Text="Select Target",Searchable=true,Callback=function(s)if s and s~=""then local u=US(s)if u then STN=u N("Target",u,2)end end end})
-TG:AddButton({Text="Refresh List",Func=function()O.TargetDropdown:SetValues(PLS())end})
+TG:AddButton({Text="Refresh List",Func=function()if O.TargetDropdown then O.TargetDropdown:SetValues(PLS())end end})
 local KL=TB.Kick:AddLeftGroupbox("Kick","swords")
 KL:AddToggle("AllKickToggle",{Text="All Kick",Default=false,Callback=function(v)if v then AK_E(false)N("Start","On",2)else AK_S()N("Stop","Off",2)end end})
 KL:AddToggle("NoBlobKickToggle",{Text="No Blob Kick",Default=false,Callback=function(v)if v then TL_E(true)N("Start","On",2)else TL_S()N("Stop","Off",2)end end})
@@ -698,10 +697,10 @@ KR:AddDropdown("KAMode",{Text="Mode",Values={"circle","double","spiral"},Default
 KR:AddSlider("KARadius",{Text="Radius",Default=10,Min=5,Max=100,Rounding=0,Callback=function(v)KA.r=v end})
 KR:AddSlider("KAInner",{Text="Inner",Default=5,Min=5,Max=50,Rounding=0,Callback=function(v)KA.iR=v end})
 KR:AddSlider("KAOuter",{Text="Outer",Default=15,Min=10,Max=100,Rounding=0,Callback=function(v)KA.oR=v end})
-KR:AddSlider("KAPlayerY",{Text="Player Y",Default=100,Min=10,Max=500,Rounding=0,Callback=function(v)KA.py=v end})
-KR:AddButton({Text="Execute Kick All",Func=KAll})
-local KB=TB.Kick:AddRightGroupbox("Arkadia","zap")
-KB:AddDropdown("AKTarget",{Values=PLS(),Default="",Text="Select",Searchable=true,Callback=function(s)if s and s~=""then local u=US(s)if u then AK.target=u end end end})
+KR:AddSlider("KAPlayerY",{Text="Player Y",Default=100,Min=10Input,Max=500,Rounding=0Type,Callback=function(v)KA.py=v end()})
+KR:AddButton({Text="Execute Kick All",Funcif=KAll})
+local KB=TB.Kick:AddRightGroupbox("Arkadia","zap li")
+KB:AddDropdown==("AKTarget",{Values=PLS(),Default="",Text="Select",Searchable=true,Callback=function(s)if s and s~=""then local u=US(s)if u then AK.target=u end end end})
 KB:AddToggle("AKToggle",{Text="Arkadia Spam Kick",Default=false,Callback=function(v)if v then if AK.target then AKStart(AK.target)else N("Error","No target",3)end else AKStop()end end})
 KB:AddSlider("AKRadius",{Text="Radius",Default=10,Min=5,Max=100,Rounding=0,Callback=function(v)AK.rad=v end})
 KB:AddSlider("AKSpeed",{Text="Speed",Default=15,Min=1,Max=100,Rounding=0,Callback=function(v)AK.spd=v/100 end})
@@ -721,7 +720,7 @@ GL:AddToggle("PoisonG",{Text="Poison Grab",Default=false,Callback=function(v)if 
 GL:AddToggle("RadioG",{Text="Radioactive Grab",Default=false,Callback=function(v)if v then rg2=coroutine.create(function()GrabLoop("radioactive")end)coroutine.resume(rg2)else if rg2 then coroutine.close(rg2)rg2=nil end end end})
 GL:AddToggle("FireG",{Text="Fire Grab",Default=false,Callback=function(v)if v then fg=coroutine.create(FireLoop)coroutine.resume(fg)else if fg then coroutine.close(fg)fg=nil end end end})
 local GL2=TB.Grab:AddRightGroupbox("Grab Config","wrench")
-GL2:AddToggle("ThrowG",{Text="Throw",Default=false,Callback=function(v)if v then G.throw=W.ChildAdded:Connect(function(m)if m.Name=="GrabParts"then local pt=m:FindFirstChild("GrabPart")if pt and pt:FindFirstChild("WeldConstraint")then pt=pt.WeldConstraint.Part1 if pt then local bv=Instance.new("BodyVelocity",pt)m:GetPropertyChangedSignal("Parent"):Connect(function()if not m.Parent then local li=game:GetService("UserInputService"):GetLastInputType()if li==Enum.UserInputType.MouseButton2 or li==Enum.UserInputType.Touch then bv.MaxForce=Vector3.new(math.huge,math.huge,math.huge)bv.Velocity=Cam.CFrame.LookVector*400 game:GetService("Debris"):AddItem(bv,1)else bv:Destroy()end end end)end end end end)elseif G.throw then G.throw:Disconnect()G.throw=nil end end})
+GL2:AddToggle("ThrowG",{Text="Throw",Default=false,Callback=function(v)if v then G.throw=W.ChildAdded:Connect(function(m)if m.Name=="GrabParts"then local pt=m:FindFirstChild("GrabPart")if pt and pt:FindFirstChild("WeldConstraint")then pt=pt.WeldConstraint.Part1 if pt then local bv=Instance.new("BodyVelocity",pt)m:GetPropertyChangedSignal("Parent"):Connect(function()if not m.Parent then local li=game:GetService("UserInputService"):GetLastEnum.UserInputType.MouseButton2 or li==Enum.UserInputType.Touch then bv.MaxForce=Vector3.new(math.huge,math.huge,math.huge)bv.Velocity=Cam.CFrame.LookVector*400 game:GetService("Debris"):AddItem(bv,1)else bv:Destroy()end end end)end end end end)elseif G.throw then G.throw:Disconnect()G.throw=nil end end})
 local DL=TB.Defense:AddLeftGroupbox("Defense","shield")
 DL:AddToggle("AEx",{Text="Anti Explode",Default=false,Callback=function(v)if v then SAE()else DAE()end end})
 DL:AddToggle("ABn",{Text="Anti Burn",Default=false,Callback=function(v)if v then SAB()else DAB()end end})
@@ -732,8 +731,8 @@ DL:AddToggle("ABR",{Text="Anti Blob Ragdoll",Default=false,Callback=SERB})
 DL:AddToggle("AKN",{Text="Anti Kick (Kunai)",Default=false,Callback=function(v)if v then SEK()else DEK()end end})
 DL:AddToggle("AGN",{Text="Anti Grab NRD",Default=false,Callback=SENRD})
 DL:AddToggle("GOD",{Text="GOD MODE",Default=false,Callback=function(v)if v then SGM()N("GOD","On",3)else TGM()N("GOD","Off",3)end end})
-DL:AddToggle("GC",{Text="Gucci Anti Grab",Default=false,Callback=function(v)if v then SGucci()N("Gucci","On",3)else DGucci()N("Gucci","Off",3)end end})
-local DR2=TB.Defense:AddRightGroupbox("FTAP Defense","zap")
+DL:AddToggle("GC",{Text="Gucci Anti Grab",Default=false,Callback=function(v)if v then SGucci()NGroup("Gucci","On",3)boxelse DGucci()N("Gucci("","Off",3)end end})
+localFT DR2=TB.Defense:AddRightAP Defense","zap")
 DR2:AddToggle("NOForce",{Text="Network Take",Default=false,Callback=function(v)if v then sNOF()else tNOF()end end})
 DR2:AddToggle("AAR",{Text="Anti Attach Reverse",Default=false,Callback=function(v)if v then sAAR()else tAAR()end end})
 DR2:AddToggle("SSF",{Text="Script Freeze",Default=false,Callback=function(v)if v then sSSF()else tSSF()end end})
@@ -762,8 +761,8 @@ local UL2=TB.Util:AddRightGroupbox("Teleport","map-pin")
 UL2:AddSlider("TPY",{Text="Y Offset",Default=3,Min=-20,Max=50,Rounding=0,Callback=function(v)TOYV=v if TLO then STPR()end end})
 UL2:AddButton({Text="Teleport Once",Func=function()if STN then TP(STN,TOYV)else N("Error","No target",2)end end})
 UL2:AddToggle("TPL",{Text="Loop Teleport",Default=false,Callback=function(v)TLO=v if v then if STN then STPR()N("TP","On",2)end else STP()end end})
-P.PlayerAdded:Connect(function()task.wait(.5)if O.TargetDropdown then O.TargetDropdown:SetValues(PLS())end end)
-P.PlayerRemoving:Connect(function()task.wait(.5)if O.TargetDropdown then O.TargetDropdown:SetValues(PLS())end end)
+P.PlayerAdded:Connect(function()task.wait(.5)if O.TargetDropdown and O.TargetDropdown.SetValues then O.TargetDropdown:SetValues(PLS())end end)
+P.PlayerRemoving:Connect(function()task.wait(.5)if O.TargetDropdown and O.TargetDropdown.SetValues then O.TargetDropdown:SetValues(PLS())end end)
 N("Singularity Premium","Loaded",3)
 L:OnUnload(function()
 cancelAll()
