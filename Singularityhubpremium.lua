@@ -1005,16 +1005,16 @@ local function AKLoop(tn)
 end
 local function AKStart(tn)
     if AK.active then return end
-    if not tn then N("God Spam Kick","No target",2); return end
+    if not tn then N("Spam Kick","No target",2); return end
     AK.active = true; AK.target = tn
     AK.thread = reg(task.spawn(function() AKLoop(tn) end))
-    N("God Spam Kick","Started "..tn,3)
+    N("Spam Kick","Started "..tn,3)
 end
 local function AKStop()
     AK.active = false
     if AK.thread then pcall(task.cancel, AK.thread); AK.thread = nil end
     AKDestroy()
-    N("God Spam Kick","Stopped",2)
+    N("Spam Kick","Stopped",2)
 end
 
 --============================================================
@@ -2023,8 +2023,8 @@ KR:AddSlider("KAOuter", {Text="Outer", Default=15,Min=10,Max=100,Rounding=0,Call
 KR:AddSlider("KAPlayerY",{Text="Player Y",Default=100,Min=10,Max=500,Rounding=0,Callback=function(v)KA.py=v end})
 KR:AddButton({Text="Execute Kick All", Func=KAll})
 
--- God Spam Kick（旧 Arkadia）
-local KB = TB.Kick:AddRightGroupbox("God Spam Kick", "zap")
+-- Spam Kick（旧 Arkadia）
+local KB = TB.Kick:AddRightGroupbox("Spam Kick", "zap")
 KB:AddDropdown("AKTarget", {
     Values = PLS(), Default = "", Text = "Select", Searchable = true,
     Callback = function(s)
@@ -2035,7 +2035,7 @@ KB:AddDropdown("AKTarget", {
     end
 })
 KB:AddToggle("AKToggle", {
-    Text = "God Spam Kick", Default = false,
+    Text = "Spam Kick", Default = false,
     Callback = function(v)
         if v then
             if AK.target then AKStart(AK.target) else N("Error","No target",3) end
@@ -2045,17 +2045,6 @@ KB:AddToggle("AKToggle", {
 KB:AddSlider("AKRadius",{Text="Radius",Default=10,Min=5,Max=100,Rounding=0,Callback=function(v)AK.rad=v end})
 KB:AddSlider("AKSpeed", {Text="Speed", Default=15,Min=1,Max=100,Rounding=0,Callback=function(v)AK.spd=v/100 end})
 KB:AddButton({Text="No Blob Kick All", Func=NBRun})
-
--- Destroy Server（Kickタブにも追加）
-local KB2 = TB.Kick:AddRightGroupbox("Destroy Server", "bomb")
-KB2:AddDropdown("DSHeightKick", {
-    Text = "Height", Values = {"Spawn (Ground)","Heaven"}, Default = "Spawn (Ground)",
-    Callback = function(v) DS.height = (v == "Heaven") and "Heaven" or "Spawn" end
-})
-KB2:AddSlider("DSRadiusKick",{Text="Radius",Default=20,Min=5,Max=100,Rounding=0,
-    Callback=function(v)DS.radius=v end})
-KB2:AddButton({Text="Destroy Server", Func=DSRun})
-KB2:AddButton({Text="Stop Lag", Func=DSStopLag})
 
 -- Kill tab
 local KLL = TB.Kill:AddLeftGroupbox("Kill", "skull")
