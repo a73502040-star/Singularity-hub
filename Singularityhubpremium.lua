@@ -511,7 +511,6 @@ if #tg==0 then tg[1]=org end
 for i=1,60 do if not TSs.run then break end local t=tg[(i-1)%#tg+1]local sp=Vector3.new(t.X+math.random(-20,20),org.Y+math.random(0,200),t.Z+math.random(-20,20))local part=Instance.new("Part")part.Size=Vector3.new(math.random(20,40),math.random(50,100),math.random(20,40))part.Position=sp part.Anchored=false part.CanCollide=true part.Material=Enum.Material.Water part.Color=Color3.fromRGB(0,120,200)part.Transparency=.3 part.Parent=W TSs.objs[#TSs.objs+1]=part if SN then pcall(function()SN:FireServer(part,part.CFrame)end)end if part.SetNetworkOwner then pcall(function()part:SetNetworkOwner(LP)end)end part.AssemblyLinearVelocity=Vector3.new(0,-200,0)task.delay(10,function()if part and part.Parent then part:Destroy()end end)task.wait(.05)end
 N("Tsunami","Wave deployed",3)TSs.run=false TRT=nil end))
 end
-
 local FLY={active=false,speed=50,bv=nil,bg=nil,conn=nil}
 local function sFly()
 if FLY.active then return end FLY.active=true
@@ -545,7 +544,6 @@ if FLY.bv then FLY.bv:Destroy()FLY.bv=nil end
 if FLY.bg then FLY.bg:Destroy()FLY.bg=nil end
 local h=MU()if h then h.PlatformStand=false end
 N("Fly","Off",2)end
-
 local SPD={active=false,val=100}
 local SPDC=nil
 local function sSpeed()
@@ -556,7 +554,6 @@ local h=MU()if h then h.WalkSpeed=SPD.val end
 end)
 N("Speed","On",3)end
 local function tSpeed()SPD.active=false if SPDC then SPDC:Disconnect()SPDC=nil end local h=MU()if h then h.WalkSpeed=16 end N("Speed","Off",2)end
-
 local CTP={active=false,conn=nil}
 local function sClickTP()
 if CTP.active then return end CTP.active=true
@@ -574,7 +571,6 @@ end
 end)
 N("ClickTP","On",3)end
 local function tClickTP()CTP.active=false if CTP.conn then CTP.conn:Disconnect()CTP.conn=nil end N("ClickTP","Off",2)end
-
 local PBG={active=false,thread=nil}
 local function sPacketBypass()
 if PBG.active then return end PBG.active=true
@@ -593,11 +589,9 @@ if EG then EG:FireServer(string.rep("X",500))end
 end
 end
 R.Heartbeat:Wait()
-end
-end))
+endend))
 N("PacketBypass","On",3)end
 local function tPacketBypass()PBG.active=false if PBG.thread then pcall(task.cancel,PBG.thread)PBG.thread=nil end N("PacketBypass","Off",2)end
-
 local SAG={active=false,thread=nil,radius=15}
 local function sAutoGrab()
 if SAG.active then return end SAG.active=true
@@ -622,7 +616,6 @@ end
 end))
 N("AutoGrab","On",3)end
 local function tAutoGrab()SAG.active=false if SAG.thread then pcall(task.cancel,SAG.thread)SAG.thread=nil end N("AutoGrab","Off",2)end
-
 local TC={active=false,thread=nil,target=nil}
 local function sTargetCrasher()
 if TC.active then return end
@@ -651,7 +644,6 @@ end
 end))
 N("Crasher","On",3)end
 local function tTargetCrasher()TC.active=false if TC.thread then pcall(task.cancel,TC.thread)TC.thread=nil end N("Crasher","Off",2)end
-
 local AL={active=false,thread=nil,lastCF=nil}
 local function sAntiLagback()
 if AL.active then return end AL.active=true
@@ -673,7 +665,6 @@ end
 end))
 N("AntiLagback","On",3)end
 local function tAntiLagback()AL.active=false if AL.thread then pcall(task.cancel,AL.thread)AL.thread=nil end AL.lastCF=nil N("AntiLagback","Off",2)end
-
 local Wn=L:CreateWindow({Title="Singularity premium",Footer="All in One",Icon="",NotifySide="Right",ShowCustomCursor=false})
 local TB={Main=Wn:AddTab("Main","user"),Kick=Wn:AddTab("Kick","swords"),Kill=Wn:AddTab("Kill","skull"),Defense=Wn:AddTab("Defense","shield"),Grab=Wn:AddTab("Grab","hand"),Dest=Wn:AddTab("Destroy","bomb"),Util=Wn:AddTab("Utility","wrench")}
 local TG=TB.Main:AddLeftGroupbox("Target","target")
