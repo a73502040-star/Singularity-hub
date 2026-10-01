@@ -1,18 +1,11 @@
 -- ============================================================
 -- Singularity hub premium (minified + FTAP Defense + Anti統合版)
 -- ============================================================
-local repo = "https://raw.githubusercontent.com/deividcomsono/Obsidian/main/"
-local libURLs = {
-    repo .. "Library.lua",
-    repo .. "dist/Library.lua",
-    repo .. "source/Library.lua",
-}
-local Library
-for _, u in ipairs(libURLs) do
-    local ok, res = pcall(function() return loadstring(game:HttpGet(u))() end)
-    if ok and res then Library = res; break end
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/deividcomsono/Obsidian/main/Library.lua"))()
+if not Library then
+    warn("[Singularity] Library load failed.")
+    return
 end
-if not Library then warn("[Singularity] Library load failed.") return end
 
 local Options, Toggles = Library.Options, Library.Toggles
 local Players = game:GetService("Players")
@@ -613,7 +606,8 @@ local function LoopBlobKickSpam()
         local s = h.SeatPart
         if not s or s.Parent.Name~="CreatureBlobman" then
             Notify("Error","Please sit on a Blobman",5)
-            if Toggles.BlobSpamKickToggle then Toggles.BlobSpamKickToggle:SetValue(false) end            return
+            if Toggles.BlobSpamKickToggle then Toggles.BlobSpamKickToggle:SetValue(false) end
+            return
         end
         local blob = s.Parent
         local br = blob:FindFirstChild("HumanoidRootPart") or blob.PrimaryPart
