@@ -45,6 +45,9 @@ S.DestroyToy  = MT and MT:FindFirstChild("DestroyToy")
 S.Ragdoll     = CE and CE:FindFirstChild("RagdollRemote")
 S.Struggle    = CE and CE:FindFirstChild("Struggle")
 
+-- ---------- UI参照 ----------
+S.Toggles = nil  -- 後で Library.Toggles を代入
+
 -- ---------- 共通変数 ----------
 S.selectedTargetName = nil
 S.Notify = function(t, d, tm) S.Library:Notify({Title = t, Description = d, Time = tm or 3}) end
@@ -166,8 +169,9 @@ S.Tabs = {
     Teleport = S.Window:AddTab("Teleport", "map-pin"),
     ToyMod   = S.Window:AddTab("Toy Mod", "wrench"),
 }
+S.Toggles = S.Library.Toggles
 
--- ---------- Main タブ（ターゲット選択 - ここに置く） ----------
+-- ---------- Main タブ（ターゲット選択） ----------
 local TG = S.Tabs.Main:AddLeftGroupbox("Target", "target")
 TG:AddDropdown("TargetDropdown", {
     Values = S.GetPlayerList(),
